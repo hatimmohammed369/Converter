@@ -1,0 +1,151 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package converter;
+
+import javafx.application.Application;
+import javafx.geometry.Pos;
+import javafx.scene.Scene;
+import javafx.scene.control.RadioButton;
+import javafx.scene.control.TextField;
+import javafx.scene.control.ToggleGroup;
+import javafx.scene.layout.Pane;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
+import javafx.scene.text.Font;
+import javafx.scene.text.Text;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundFill;
+import javafx.scene.text.FontPosture;
+import javafx.scene.text.FontWeight;
+import javafx.stage.Stage;
+
+/**
+ *
+ * @author Acer
+ */
+public class Converter extends Application {
+    String lastSelected = "Decimal";
+    final static Color TEXT_COLOR = Color.web("FFFFFF");
+    @Override
+    public void start(Stage stage) {
+        TextField value = new TextField("0");
+        value.setFont(Font.font(15));
+        {
+            Rectangle valueFieldRect = new Rectangle(530, 30);
+            value.setShape(valueFieldRect);
+            value.setPrefSize(530, 30);
+            value.setAlignment(Pos.CENTER);
+        }
+        ToggleGroup tg = new ToggleGroup();
+        RadioButton decimal = new RadioButton("Decimal");
+        decimal.setFont(Font.font("System", FontWeight.BOLD, FontPosture.REGULAR, 15));
+        decimal.setTextFill(TEXT_COLOR);
+        decimal.setToggleGroup(tg);
+
+        RadioButton binary = new RadioButton("Binary");
+        binary.setFont(Font.font("System", FontWeight.BOLD, FontPosture.REGULAR, 15));
+        binary.setTextFill(TEXT_COLOR);
+        binary.setToggleGroup(tg);
+
+        RadioButton octal = new RadioButton("Octal");
+        octal.setFont(Font.font("System", FontWeight.BOLD, FontPosture.REGULAR, 15));
+        octal.setTextFill(TEXT_COLOR);
+        octal.setToggleGroup(tg);
+        
+        RadioButton hexadecimal = new RadioButton("Hexadecimal");
+        hexadecimal.setFont(Font.font("System", FontWeight.BOLD, FontPosture.REGULAR, 15));
+        hexadecimal.setTextFill(TEXT_COLOR);
+        hexadecimal.setToggleGroup(tg);
+        
+        decimal.setOnAction((event) -> {
+        	String text = value.getText();
+        	switch (lastSelected) {
+        		case "Binary":
+        			value.setText( Conversions.binaryToDecimal(text) );
+        			break;
+        		case "Octal":
+        			value.setText( Conversions.octalToDecimal(text) );
+        			break;
+        		case "Hexadecimal":
+        			value.setText( Conversions.hexadecimalToDecimal(text) );
+        			break;
+        	}
+                lastSelected = "Decimal";
+        });
+
+        binary.setOnAction((event) -> {
+        	String text = value.getText();
+        	switch (lastSelected) {
+        		case "Decimal":
+        			value.setText( Conversions.decimalToBinary(text) );
+        			break;
+        		case "Octal":
+        			value.setText( Conversions.octalToBinary(text) );
+        			break;
+        		case "Hexadecimal":
+        			value.setText( Conversions.hexadecimalToBinary(text) );
+        			break;
+        	}
+                lastSelected = "Binary";
+        });
+
+        octal.setOnAction((event) -> {
+        	String text = value.getText();
+        	switch (lastSelected) {
+        		case "Decimal":
+        			value.setText( Conversions.decimalToOctal(text) );
+        			break;
+        		case "Binary":
+        			value.setText( Conversions.binaryToOctal(text) );
+        			break;
+        		case "Hexadecimal":
+        			value.setText( Conversions.hexadecimalToOctal(text) );
+        			break;
+        	}
+                lastSelected = "Octal";
+        });
+
+        hexadecimal.setOnAction((event) -> {
+        	String text = value.getText();
+        	switch (lastSelected) {
+        		case "Decimal":
+        			value.setText( Conversions.decimalToHexadecimal(text) );
+        			break;
+        		case "Binary":
+        			value.setText( Conversions.binaryToHexadecimal(text) );
+        			break;
+        		case "Octal":
+        			value.setText( Conversions.octalToHexadecimal(text) );
+        			break;
+        	}
+                lastSelected = "Hexadecimal";
+        });
+
+        Pane root = new Pane();
+        root.setBackground(new Background( new BackgroundFill(Color.BLACK, null, null) ));
+
+        root.getChildren().addAll(value, decimal, binary, octal, hexadecimal);
+
+        value.relocate(10, 10);
+        decimal.relocate(100, 50);
+        binary.relocate(190, 50);
+        octal.relocate(270, 50);
+        hexadecimal.relocate(350, 50);
+        tg.selectToggle(decimal);
+        
+        stage.setScene(new Scene(root, 550, 70));
+        stage.setResizable(false);
+        stage.show();
+    }
+
+    /**
+     * @param args the command line arguments
+     */
+    public static void main(String[] args) {
+        launch(args);
+    }
+    
+}
